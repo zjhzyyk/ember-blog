@@ -47,60 +47,60 @@ module.exports = function (grunt) {
                 files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
                 tasks: ['neuter']
             },
-            // livereload: {
-            //     options: {
-            //         livereload: LIVERELOAD_PORT
-            //     },
-            //     files: [
-            //         '.tmp/scripts/*.js',
-            //         '<%= yeoman.app %>/*.html',
-            //         '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
-            //         '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
-            //     ]
-            // }
+            livereload: {
+                options: {
+                    livereload: LIVERELOAD_PORT
+                },
+                files: [
+                    '.tmp/scripts/*.js',
+                    '<%= yeoman.app %>/*.html',
+                    '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
+                    '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+                ]
+            }
         },
-        // connect: {
-        //     options: {
-        //         port: 9000,
-        //         // change this to '0.0.0.0' to access the server from outside
-        //         hostname: 'localhost'
-        //     },
-        //     livereload: {
-        //         options: {
-        //             middleware: function (connect) {
-        //                 return [
-        //                     lrSnippet,
-        //                     mountFolder(connect, '.tmp'),
-        //                     mountFolder(connect, yeomanConfig.app)
-        //                 ];
-        //             }
-        //         }
-        //     },
-        //     test: {
-        //         options: {
-        //             middleware: function (connect) {
-        //                 return [
-        //                     mountFolder(connect, '.tmp'),
-        //                     mountFolder(connect, 'test')
-        //                 ];
-        //             }
-        //         }
-        //     },
-        //     dist: {
-        //         options: {
-        //             middleware: function (connect) {
-        //                 return [
-        //                     mountFolder(connect, yeomanConfig.dist)
-        //                 ];
-        //             }
-        //         }
-        //     }
-        // },
-        // open: {
-        //     server: {
-        //         path: 'http://localhost:<%= connect.options.port %>'
-        //     }
-        // },
+        connect: {
+            options: {
+                port: 9000,
+                // change this to '0.0.0.0' to access the server from outside
+                hostname: 'localhost'
+            },
+            livereload: {
+                options: {
+                    middleware: function (connect) {
+                        return [
+                            lrSnippet,
+                            mountFolder(connect, '.tmp'),
+                            mountFolder(connect, yeomanConfig.app)
+                        ];
+                    }
+                }
+            },
+            test: {
+                options: {
+                    middleware: function (connect) {
+                        return [
+                            mountFolder(connect, '.tmp'),
+                            mountFolder(connect, 'test')
+                        ];
+                    }
+                }
+            },
+            dist: {
+                options: {
+                    middleware: function (connect) {
+                        return [
+                            mountFolder(connect, yeomanConfig.dist)
+                        ];
+                    }
+                }
+            }
+        },
+        open: {
+            server: {
+                path: 'http://localhost:<%= connect.options.port %>'
+            }
+        },
         clean: {
             dist: {
                 files: [{
@@ -365,16 +365,9 @@ module.exports = function (grunt) {
         'usemin'
     ]);
 
-    // grunt.registerTask('default', [
-    //     'jshint',
-    //     'test',
-    //     'build'
-    // ]);
-    
     grunt.registerTask('default', [
-        'clean:server',
-        'concurrent:server',
-        'neuter:app',
-        'watch'
+        'jshint',
+        'test',
+        'build'
     ]);
 };

@@ -1,0 +1,697 @@
+
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Understanding JavaScript Inheritance - Alex Sexton</title>
+  <meta name="author" content="Alex Sexton">
+
+  
+  <meta name="description" content="So someone shoulder-taps you and asks you to explain the concepts behind JavaScript Inheritance to them. In my eyes you&#8217;ve
+got a few options. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://alexsexton.com/blog/2013/04/understanding-javascript-inheritance">
+  <link href="/favicon.png" rel="icon">
+  <link href="screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Alex Sexton</a></h1>
+  
+    <h2>Web Hacking. JavaScript.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/AlexSexton" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:alexsexton.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Understanding JavaScript Inheritance</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-12T03:33:00-05:00" pubdate data-updated="true">Apr 12<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>So someone shoulder-taps you and asks you to explain the concepts behind JavaScript Inheritance to them. In my eyes you&#8217;ve
+got a few options.</p>
+
+<h2>The Terminology Play</h2>
+
+<p>You mention that it&#8217;s <a href="https://www.google.com/search?q=define%3A+prototypal"><strong>prototypal</strong></a> inheritance, not <strong>prototypical</strong>
+and pretty much gloss over the rest, comfortable in your superiority in terminology. You may go as far as saying &#8220;Objects just
+come from other Objects because there aren&#8217;t any classes.&#8221; Then you just link to
+<a href="http://javascript.crockford.com/prototypal.html">Crock&#8217;s Post</a> on it, and try to seem busy for the next few days.</p>
+
+<p>Many years later you find out that <strong>Prototypal</strong> and <strong>Prototypical</strong> are synonyms, but you choose to ignore this.</p>
+
+<h2>The Like-Classical-Inheritance-But-Different Play aka the Run-On Sentence Play</h2>
+
+<p>&#8220;So in Java, like, you have classes or whatever, right? Well so imagine that you don&#8217;t have those, but you still want to do
+that same type of thing or whatever, so then you just take another object instead of a class and you just kind of use it
+like it&#8217;s a class, but it&#8217;s not because it can change and it&#8217;s just a normal object, and if it changes and you don&#8217;t override
+the object, oh yea, so you can decide to override the parent object class thing, so if you dont do that and the parent changes
+the link is live&#8230;&#8221;</p>
+
+<p>And so forth.</p>
+
+<h2>The Animal Play</h2>
+
+<p>This is a pretty popular one.</p>
+
+<p>So let&#8217;s say we want to make an <code>Animal</code> class in our code. As is often necessary in production JavaScript applications.</p>
+
+<p>First we make a &#8220;constructor function,&#8221; which acts kind of like a constructor method on the inside of a class in a classical
+language when it&#8217;s invoked with the <code>new</code> operator. Except this one is on the outside.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">Animal</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">myAnimal</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Animal</span><span class="p">(</span><span class="s1">&#39;Annie&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then we want to have actions that all animals can do.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Animal</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">walk</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39; is walking.&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But then you want to define a more specific <em>type</em> of animal. Things start to get weird.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// I think we need to define a new Animal type and extend from it somehow</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">Dog</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// BUT HOW DO WE EXTEND</span>
+</span><span class='line'><span class="c1">// WITHOUT AN INSTANCE TO USE?</span>
+</span><span class='line'><span class="nx">Dog</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">Animal</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span> <span class="c1">// ?? I HAVE NO IDEA</span>
+</span><span class='line'><span class="c1">// Maybe that&#39;ll work for some stuff?</span>
+</span><span class='line'><span class="c1">// ProHint™: probably not much, once you start modifying one of them :D</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you remember that Prototypal Inheritance doesn&#8217;t really do &#8216;classes&#8217; so much. So you do something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">Dog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Animal</span><span class="p">(</span><span class="s1">&#39;Annie&#39;</span><span class="p">);</span> <span class="c1">// ??? NO THATS NOT IT &gt;:(</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Maybe we can try Object.create? I hear it&#39;s prototypal-y</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">Dog</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">Animal</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Maybe that worked? Let&#39;s see...</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">myDog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Dog</span><span class="p">(</span><span class="s1">&#39;Sparky&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="c1">// TypeError: object is not a function</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Shucks</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And you eventually simply converge on the&#8230;</p>
+
+<h2>The Father/Son Analogy Play</h2>
+
+<p>Here we go. Finally a <strong>real world</strong> example of &#8216;instances begetting instances.&#8217; It&#8217;ll be a perfect analogy.
+It&#8217;s even an interview question some places. Let&#8217;s see how we might implement the relationship of a father
+and son (or a parent to its child) in JavaScript.</p>
+
+<p>We&#8217;ll start out like we did before, with a Human constructor</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">Human</span><span class="p">(</span> <span class="nx">name</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then we&#8217;ll add in a common human shared action.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Human</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">sayHi</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Hello, I&#39;m &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So we&#8217;ll create my dad first.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Instantiate him</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">myDad</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Human</span><span class="p">(</span><span class="s1">&#39;Bill Sexton&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Greet him</span>
+</span><span class='line'><span class="nx">myDad</span><span class="p">.</span><span class="nx">sayHi</span><span class="p">();</span>
+</span><span class='line'><span class="c1">// &quot;Hello, I&#39;m Bill Sexton&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Score.</strong> Now let&#8217;s create me.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Let&#39;s use ES5 `object.create` in order to be as &#39;prototypal&#39; as possible.</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">myDad</span><span class="p">);</span>
+</span><span class='line'><span class="nx">me</span><span class="p">.</span><span class="nx">sayHi</span><span class="p">();</span>
+</span><span class='line'><span class="c1">// &quot;Hello, I&#39;m Bill Sexton&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It&#8217;s a start! Seems like I inherited a little too much from my dad, but I inherited, none the less.</p>
+
+<p>Let&#8217;s try to smooth things out to make the analogy work better. So we&#8217;ll instantiate objects without
+a name and have a parent name them after they&#8217;re created.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Wrap it all together</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">makeBaby</span><span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// Instantiate a new object based on the parent</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">baby</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">parent</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Set the name of the baby</span>
+</span><span class='line'>  <span class="nx">baby</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Give the baby away</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">baby</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Perfect. Now the baby can <code>sayHi</code> on its own.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">alex</span> <span class="o">=</span> <span class="nx">makeBaby</span><span class="p">(</span><span class="nx">myDad</span><span class="p">,</span> <span class="s1">&#39;Alex Sexton&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">alex</span><span class="p">.</span><span class="nx">sayHi</span><span class="p">();</span>
+</span><span class='line'><span class="c1">// &quot;Hello, I&#39;m Alex Sexton&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Err. <strong>yipes</strong>. Babies can&#8217;t talk. And what&#8217;s this deal with a baby being made by <strong>one</strong> parent. Not to worry,
+we can fix all of this.</p>
+
+<p>First we&#8217;ll probably want to try to take two parents into the <code>makeBaby</code> function (no giggles).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">makeBaby</span><span class="p">(</span><span class="nx">father</span><span class="p">,</span> <span class="nx">mother</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">baby</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(...</span><span class="c1">// fuuu</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Multiple Inheritance! How did <em>you</em> get here? Ugh. Fine. We&#8217;ll just simply mock the human chromosome pattern into
+our little inheritance example.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Let&#39;s take a set of 4 genes for ease of</span>
+</span><span class='line'><span class="c1">// example here. We&#39;ll put them in charge</span>
+</span><span class='line'><span class="c1">// a few things.</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">Human</span> <span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">genes_mom</span><span class="p">,</span> <span class="nx">genes_dad</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Set the genes</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">genes</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">darkHair</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_selectGenes</span><span class="p">(</span><span class="nx">genes_mom</span><span class="p">.</span><span class="nx">darkHair</span><span class="p">,</span> <span class="nx">genes_dad</span><span class="p">.</span><span class="nx">darkHair</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">smart</span><span class="o">:</span>    <span class="k">this</span><span class="p">.</span><span class="nx">_selectGenes</span><span class="p">(</span><span class="nx">genes_mom</span><span class="p">.</span><span class="nx">smart</span><span class="p">,</span>    <span class="nx">genes_dad</span><span class="p">.</span><span class="nx">smart</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">athletic</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_selectGenes</span><span class="p">(</span><span class="nx">genes_mom</span><span class="p">.</span><span class="nx">athletic</span><span class="p">,</span> <span class="nx">genes_dad</span><span class="p">.</span><span class="nx">athletic</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">tall</span><span class="o">:</span>     <span class="k">this</span><span class="p">.</span><span class="nx">_selectGenes</span><span class="p">(</span><span class="nx">genes_mom</span><span class="p">.</span><span class="nx">tall</span><span class="p">,</span>     <span class="nx">genes_dad</span><span class="p">.</span><span class="nx">tall</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Since genes affect you since birth we can set these as actual attributes</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">attributes</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">darkHair</span><span class="o">:</span> <span class="o">!!</span><span class="p">(</span><span class="o">~</span><span class="k">this</span><span class="p">.</span><span class="nx">genes</span><span class="p">.</span><span class="nx">darkHair</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">)),</span>
+</span><span class='line'>    <span class="nx">smart</span><span class="o">:</span> <span class="o">!!</span><span class="p">(</span><span class="o">~</span><span class="k">this</span><span class="p">.</span><span class="nx">genes</span><span class="p">.</span><span class="nx">smart</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">)),</span>
+</span><span class='line'>    <span class="nx">athletic</span><span class="o">:</span> <span class="o">!!</span><span class="p">(</span><span class="o">~</span><span class="k">this</span><span class="p">.</span><span class="nx">genes</span><span class="p">.</span><span class="nx">athletic</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">)),</span>
+</span><span class='line'>    <span class="nx">tall</span><span class="o">:</span> <span class="o">!!</span><span class="p">(</span><span class="o">~</span><span class="k">this</span><span class="p">.</span><span class="nx">genes</span><span class="p">.</span><span class="nx">tall</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// You don&#39;t have access to your own gene selection</span>
+</span><span class='line'><span class="c1">// so we&#39;ll make this private (but in the javascript way)</span>
+</span><span class='line'><span class="nx">Human</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_selectGenes</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">gene1</span><span class="p">,</span> <span class="nx">gene2</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// Assume that a gene is a 2 length array of the following possibilities</span>
+</span><span class='line'>  <span class="c1">// DD, Dr, rD, rr -- the latter being the only non &quot;dominant&quot; result</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Simple random gene selection</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">[</span> <span class="nx">gene1</span><span class="p">[</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">],</span> <span class="nx">gene2</span><span class="p">[</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">]</span> <span class="p">]</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Human</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">sayHi</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Hello, I&#39;m &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">makeBaby</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">mother</span><span class="p">,</span> <span class="nx">father</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// Send in the genes of each parent</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">baby</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Human</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">mother</span><span class="p">.</span><span class="nx">genes</span><span class="p">,</span> <span class="nx">father</span><span class="p">.</span><span class="nx">genes</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">baby</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Elementary</strong>. My only beef is that we no longer are using real prototypal inheritance.
+There is no live link between the parents and the child. If there was only one parent,
+we could use the <code>__proto__</code> property to set the parent as the prototype after the
+baby was instantiated. However we have two parents&#8230;</p>
+
+<p>So we&#8217;ll need to implement runtime getters that do a lookup for each parent via
+<a href="http://wiki.ecmascript.org/doku.php?id=harmony:direct_proxies">ES Proxies</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">makeBaby</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">mother</span><span class="p">,</span> <span class="nx">father</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// Send in the genes of each parent</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">baby</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Human</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">mother</span><span class="p">.</span><span class="nx">genes</span><span class="p">,</span> <span class="nx">father</span><span class="p">.</span><span class="nx">genes</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Proxy the baby</span>
+</span><span class='line'>  <span class="k">return</span> <span class="k">new</span> <span class="nx">Proxy</span><span class="p">(</span><span class="nx">baby</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">proxy</span><span class="p">,</span> <span class="nx">prop</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// shortcut the lookup</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">baby</span><span class="p">[</span><span class="nx">prop</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">baby</span><span class="p">[</span><span class="nx">prop</span><span class="p">];</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Default parent</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">parent</span> <span class="o">=</span> <span class="nx">father</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Spice it up</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">parent</span> <span class="o">=</span> <span class="nx">mother</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// See if they have it</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nx">parent</span><span class="p">[</span><span class="nx">prop</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So now we support live lookups of parents, and, you know, some simplified genetics.</p>
+
+<p>Isn&#8217;t that just a simple, well-defined, example of how straightforward inheritance can be in
+JavaScript?</p>
+
+<h2>Conclusion</h2>
+
+<p>Sometimes these analogies get pretty crazy in my head, and I start to think that maybe
+instead of trying to apply known examples in the outside world in order to help people
+understand, it&#8217;s often better to just let someone know why they might wanna use
+inheritance in their programs!</p>
+
+<p>I personally find the best Prototypal Inheritance analogy to be:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">defaults</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">zero</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">one</span><span class="o">:</span> <span class="mi">1</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">myOptions</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">defaults</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">yourOptions</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">defaults</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// When I want to change *just* my options</span>
+</span><span class='line'><span class="nx">myOptions</span><span class="p">.</span><span class="nx">zero</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// When you wanna change yours</span>
+</span><span class='line'><span class="nx">yourOptions</span><span class="p">.</span><span class="nx">one</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// When we wanna change the **defaults** even after we&#39;ve got our options</span>
+</span><span class='line'><span class="c1">// even **AFTER** we&#39;ve already created our instances</span>
+</span><span class='line'><span class="nx">defaults</span><span class="p">.</span><span class="nx">two</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">myOptions</span><span class="p">.</span><span class="nx">two</span><span class="p">;</span> <span class="c1">// 2</span>
+</span><span class='line'><span class="nx">yourOptions</span><span class="p">.</span><span class="nx">two</span><span class="p">;</span> <span class="c1">// 2</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So stop making everything so confusing and go program cool stuff, and ignore
+my old presentations when I used these analogies.</p>
+
+<p>&lt;3z</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Alex Sexton</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-12T03:33:00-05:00" pubdate data-updated="true">Apr 12<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/inheritance/'>inheritance</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://alexsexton.com/blog/2013/04/understanding-javascript-inheritance/" data-via="SlexAxton" data-counturl="http://alexsexton.com/blog/2013/04/understanding-javascript-inheritance/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/03/deploying-javascript-applications" title="Previous Post: Deploying JavaScript Applications">&laquo; Deploying JavaScript Applications</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+<section style="padding-top:10px;">
+  <img src="http://gravatar.com/avatar/7ea369b9b67a85f638af2e0f5d708d2d?s=260" alt="Alex Sexton" title="Alex Sexton" />
+</section>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/04/understanding-javascript-inheritance/">Understanding JavaScript Inheritance</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/deploying-javascript-applications">Deploying JavaScript Applications</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/introducing-the-jed-toolkit/">Introducing The Jed Toolkit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/08/third-party-javascript-in-the-third-person/">Third Party JavaScript In The Third Person</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/third-party-front-end-performance-part-1/">Third Party Front-end Performance</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/SlexAxton" rel="me">@SlexAxton</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'SlexAxton',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("SlexAxton", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/SlexAxton" class="twitter-follow-button" data-show-count="true">Follow @SlexAxton</a>
+  
+</section>
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/107780139765882604901/posts" rel="me">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Alex Sexton -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+</body>
+</html>

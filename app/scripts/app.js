@@ -1,5 +1,4 @@
 var EmTmp = window.EmTmp = Ember.Application.create();
-EmTmp.ApplicationAdapter = DS.FixtureAdapter.extend();
 
 /* Order and include as you please. */
 require('scripts/controllers/*');

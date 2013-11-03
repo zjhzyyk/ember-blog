@@ -1,32 +1,36 @@
-<div>
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Your App</a>
-        </div>
-        <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul class="nav navbar-nav">
-              <li><a {{action "addBlog"}}>add blog</a></li>
-            </ul>
-        </div>
+<div id="main-body" class="collapse-sidebar">
+    <header role="banner">
+        <hgroup>
+            <h1><a href="/">My blog</a></h1>
+            <h2>This is a blog system.</h2>
+        </hgroup>
+    </header>
+    <nav role="navigation">
+        <ul class="subscription" data-subscription="rss">
+            <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+        </ul>
+  
+        <form action="http://google.com/search" method="get">
+            <fieldset role="search">
+                <input type="hidden" name="q" value="site:google.com" />
+                <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+            </fieldset>
+        </form>
+
+        <ul class="main-navigation">
+          <li>{{#link-to "blogs"}}Blogs{{/link-to}}</li>
+          <li>{{#link-to "archives"}}Archives{{/link-to}}</li>
+        </ul>
     </nav>
-    <div class="container" id="main">
-        <div class="row">
-            <div>
-                <div class="col-md-3">
-                    <div class="well sidebar-nav">
-                        <span class="nav-header">Colors</span>
-                    </div>
-                </div>
-                <div class="col-md-9">
-                    {{outlet}}
-                </div>
-            </div>
-        </div>
+    
+    <div id="main">
+    <div id="content">
+        {{outlet}}
     </div>
+    </div>
+    <footer role="contentinfo">
+        <p>
+        Copyright &copy; 2013 - daxuegou
+        </p>
+    </footer>
 </div>

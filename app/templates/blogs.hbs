@@ -1,0 +1,17 @@
+<div class="blog-index">
+	{{#each blog in content}}
+		<article>
+			<header>
+				<h1 class="entry-title">
+					{{#link-to 'blog' blog}}{{blog.title}}{{/link-to}}
+				</h1>
+				<p class="meta">
+					<time>{{blog.date}}</time>
+				</p>
+			</header>
+			<div class="entry-content">{{{blog.content}}}</div>
+		</article>
+	{{else}}
+	No blogs.
+	{{/each}}
+</div>
