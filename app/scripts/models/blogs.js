@@ -1,8 +1,4 @@
-
-
 var Promise = Em.RSVP.Promise;
-var baseURL = location.protocol+"//"+location.hostname;
-if (location.port!="") baseURL+=(":"+location.port);
 
 EmTmp.Blogs = Em.Object.extend({});
 
@@ -14,7 +10,7 @@ EmTmp.Blogs.reopenClass({
 			if (self._blogs) {
 				resolve(self._blogs);
 			} else {
-				resolve($.getJSON(baseURL+"/getblogs?page=1").then(function(res){
+				resolve($.getJSON("/getblogs?page=1").then(function(res){
 					var blogs = Em.A();
 					res.data.forEach(function (item){
 						item.id = item._id;

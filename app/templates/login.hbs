@@ -1,5 +1,9 @@
-<form role="form" id="login-form">
-	<input type="text" class="form-control form-group" placeholder="Username">
-	<input type="password" class="form-control form-group" placeholder="Password">  
-	<input class="btn btn-primary col-md-12" type="submit" value="Log In">
+<form role="form" id="login-form" {{action login on="submit"}}>
+	{{input class="form-control form-group" value=username type="text" placeholder="Username"}}
+    {{input class="form-control form-group" value=password type="password" placeholder="Password"}}
+    <label class="form-group form-control">
+    	{{input type="checkbox" checked=rememberme}}
+    	Remember me
+	</label>
+    {{input class="btn btn-primary col-md-12" type="submit" value="Log In"}}
 </form>

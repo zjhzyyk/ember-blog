@@ -1,6 +1,12 @@
-var EmTmp = window.EmTmp = Ember.Application.create();
+var EmTmp = window.EmTmp = Ember.Application.create({
+	ready: function(){
+		this.register('session:current', EmTmp.Session);
+    this.inject('controller', 'session', 'session:current');
+	}
+});
 
 /* Order and include as you please. */
+require('scripts/session');
 require('scripts/controllers/*');
 require('scripts/store');
 require('scripts/models/*');

@@ -5,6 +5,7 @@ EmTmp.Router.map(function () {
 		this.route("edit");
 	});
 	this.route('login');
+	this.route('register');
 	this.route('logout');
 });
 
