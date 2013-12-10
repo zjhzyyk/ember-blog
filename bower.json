@@ -1,6 +1,6 @@
 {
-  "name": "em-tmp",
-  "version": "0.0.0",
+  "name": "em-blog",
+  "version": "0.0.1",
   "dependencies": {
     "ember": "1.1.2",
     "bootstrap-sass": "~3.0.0"

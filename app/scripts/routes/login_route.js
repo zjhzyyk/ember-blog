@@ -1,4 +1,4 @@
-EmTmp.LoginRoute = Em.Route.extend({
+EmBlog.LoginRoute = Em.Route.extend({
 	setupController: function(controller){
 		controller.reset();
 	}

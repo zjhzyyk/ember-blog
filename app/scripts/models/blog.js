@@ -1,4 +1,4 @@
-EmTmp.Blog = Em.Object.extend({
+EmBlog.Blog = Em.Object.extend({
 	year: function() {
 		return this.get("createTime").getFullYear();
 	}.property("createTime"),

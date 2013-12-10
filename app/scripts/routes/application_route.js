@@ -1,6 +1,6 @@
-EmTmp.ApplicationRoute = Em.Route.extend({
+EmBlog.ApplicationRoute = Em.Route.extend({
 	model: function () {
-		return EmTmp.User.loadUser();
+		return EmBlog.User.loadUser();
 	},
 	setupController: function (controller, model) {
 		if (model.username) {

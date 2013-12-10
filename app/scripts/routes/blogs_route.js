@@ -1,5 +1,5 @@
-EmTmp.BlogsRoute = Em.Route.extend({
+EmBlog.BlogsRoute = Em.Route.extend({
 	model: function () {
-		return EmTmp.Blogs.loadBlogs();
+		return EmBlog.Blogs.loadBlogs();
 	}
 });

@@ -1,5 +1,5 @@
-EmTmp.ArchivesRoute = Em.Route.extend({
+EmBlog.ArchivesRoute = Em.Route.extend({
 	model: function () {
-		return EmTmp.Blogs.loadBlogs();
+		return EmBlog.Blogs.loadBlogs();
 	}
 });

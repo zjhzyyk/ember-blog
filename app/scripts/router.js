@@ -1,4 +1,4 @@
-EmTmp.Router.map(function () {
+EmBlog.Router.map(function () {
 	this.resource("archives");
 	this.resource("blogs");
 	this.resource("blog", {path: '/blog/:blog_id'}, function(){
@@ -9,6 +9,6 @@ EmTmp.Router.map(function () {
 	this.route('logout');
 });
 
-EmTmp.Router.reopen({
+EmBlog.Router.reopen({
 	location: 'history'
 });

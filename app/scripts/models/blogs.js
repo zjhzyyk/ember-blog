@@ -1,8 +1,8 @@
 var Promise = Em.RSVP.Promise;
 
-EmTmp.Blogs = Em.Object.extend({});
+EmBlog.Blogs = Em.Object.extend({});
 
-EmTmp.Blogs.reopenClass({
+EmBlog.Blogs.reopenClass({
 	loadBlogs: function() {
 		var self = this;
 		var prevYear = 1000000;
@@ -15,7 +15,7 @@ EmTmp.Blogs.reopenClass({
 					res.data.forEach(function (item){
 						item.id = item._id;
 						item.createTime = new Date(item.createTime);
-						var blog = EmTmp.Blog.create(item);
+						var blog = EmBlog.Blog.create(item);
 						if (blog.get('year')<prevYear) blog.set('showYear', true);
 						else blog.set('showYear', false);
 						prevYear = blog.get('year');

@@ -1,6 +1,6 @@
 {
-  "name": "em-tmp",
-  "version": "0.0.0",
+  "name": "em-blog",
+  "version": "0.0.1",
   "dependencies": {
     "express": "~3.4.4",
     "mongoose": "~3.8.0",

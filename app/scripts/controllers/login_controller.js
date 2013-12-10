@@ -1,4 +1,4 @@
-EmTmp.LoginController = Em.Controller.extend({
+EmBlog.LoginController = Em.Controller.extend({
 	reset: function() {
     this.setProperties({
       username: "",

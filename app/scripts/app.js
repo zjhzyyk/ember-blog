@@ -1,6 +1,6 @@
-var EmTmp = window.EmTmp = Ember.Application.create({
+var EmBlog = window.EmBlog = Ember.Application.create({
 	ready: function(){
-		this.register('session:current', EmTmp.Session);
+		this.register('session:current', EmBlog.Session);
     this.inject('controller', 'session', 'session:current');
 	}
 });
