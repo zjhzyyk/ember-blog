@@ -1,4 +1,4 @@
 module.exports = {
-	blogsPerPage: 20,
-	summariesPerPage: 10
+	blogsPerPage: 1,
+	summariesPerPage: 1
 };

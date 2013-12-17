@@ -1,11 +1,14 @@
 var EmBlog = window.EmBlog = Ember.Application.create({
 	ready: function(){
 		this.register('session:current', EmBlog.Session);
-    this.inject('controller', 'session', 'session:current');
+		this.register('config:current', EmBlog.Config);
+		this.inject('controller', 'session', 'session:current');
+		this.inject('controller', 'config', 'config:current');
 	}
 });
 
 /* Order and include as you please. */
+require('scripts/config');
 require('scripts/session');
 require('scripts/controllers/*');
 require('scripts/store');

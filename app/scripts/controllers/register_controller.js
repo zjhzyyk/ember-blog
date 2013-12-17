@@ -12,7 +12,8 @@ EmBlog.RegisterController = Em.Controller.extend({
   		var self = this, data = this.getProperties('username', 'password', 'email');
       // Clear out any error messages.
       this.set('errorMessage', null);
-      data.password = CryptoJS.PBKDF2(data.password, data.username, { keySize: 16, iterations: 100 }).toString();
+      data.password = CryptoJS.PBKDF2(data.password, data.username, 
+        { keySize: self.config.get('pbkdf2_keysize'), iterations: self.config.get('pbkdf2_iterations')}).toString();
       $.post('/register', data).then(function() {
         self.transitionToRoute('/');
       });

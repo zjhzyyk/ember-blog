@@ -1,0 +1,4 @@
+/app/*
+/.tmp/*
+/.tmp
+/node_modules/*

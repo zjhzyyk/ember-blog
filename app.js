@@ -8,23 +8,23 @@ var app = express();
 
 app.configure(function(){
   // app.use(express.favicon());
-  // app.use(express.bodyParser());
   app.use(express.json());
   app.use(express.urlencoded());
   app.use(express.methodOverride());
+  app.use(express.cookieParser());
+  app.use(express.session({ secret: 'keyboard cat' }));
   app.use(function(req, res, next) {
     if (req.method == "GET") {
+      //url rewrite
       var result = req.url.match(/\/(bower_components|styles|scripts)/);
       if (result) {
         req.url = req.url.slice(result.index);
-      } else if (/^\/(blogs|archives|login|register|(blog\/([0-9a-zA-Z]+)))/.test(req.url)) {
+      } else if (/^\/(blogs|archives|login|register|change\-password|(blog\/([0-9a-zA-Z]+)))/.test(req.url)) {
         req.url = "/";
       }
     }
     next();
   });
-  app.use(express.cookieParser());
-  app.use(express.session({ secret: 'keyboard cat' }));
   app.use(app.router);
   app.use(express.logger('dev'));
   app.use(express['static'](__dirname + '/app'));
@@ -39,6 +39,8 @@ app.get('/getblogs', blog.getBlogs);
 app.get('/getUser', user.getUser);
 app.post('/auth', user.login);
 app.post('/register', user.register);
+app.post('/logout', user.logout);
+app.post('/change-password', user.changePassword);
 
 var port = process.env.PORT || 3000;
 app.listen(port);

@@ -17,13 +17,17 @@ EmBlog.LoginController = Em.Controller.extend({
       var self = this, data = this.getProperties('username', 'password', 'rememberme');
       // Clear out any error messages.
       this.set('errorMessage', null);
-      data.password = CryptoJS.PBKDF2(data.password, data.username, { keySize: 16, iterations: 100 }).toString();
+      // console.log("keysize", self.config.get('pbkdf2_keysize'));
+      // console.log("iterations", self.config.get('pbkdf2_iterations'));
+      data.password = CryptoJS.PBKDF2(data.password, data.username, {
+        keySize: self.config.get('pbkdf2_keysize'), 
+        iterations: self.config.get("pbkdf2_iterations")
+      }).toString();
       console.log(data.password);
       $.post('/auth', data).then(function(response) {
         self.set('errorMessage', response.message);
         if (response.success) {
           console.log('Login succeeded!');
-          // self.set('token', response.token);
           self.session.set('loggedIn', true);
           self.session.set('username', data.username);
           var attemptedTransition = self.get('attemptedTransition');

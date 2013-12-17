@@ -6,7 +6,7 @@ EmBlog.Router.map(function () {
 	});
 	this.route('login');
 	this.route('register');
-	this.route('logout');
+	this.route('changePassword', {path: '/change-password'});
 });
 
 EmBlog.Router.reopen({

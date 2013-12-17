@@ -2373,12 +2373,12 @@ article h2:first-of-type {
   font-weight: normal;
   line-height: 1.428571429;
 }
-#login-form, #register-form {
+#login-form, #register-form, #change-password-form {
   width: 250px;
   margin: 40px auto;
 }
 
-#content * {
+#content *, .dropdown * {
   box-sizing: border-box;
 }
 
@@ -2391,14 +2391,14 @@ article h2:first-of-type {
 }
 
 .dropdown-menu li {
-  margin: 0;
+  margin: 0 !important;
   padding: 0;
-  border: none;
+  border: none !important;
   width: 100%;
 }
 
 .dropdown-menu a {
-  border: none;
+  border: none !important;
   width: 100%;
   /*min-width: 160px;*/
   /*padding: 3px 0 !important;*/
@@ -2413,11 +2413,11 @@ article h2:first-of-type {
   top: 125%;
   right: -20px;
   z-index: 1000;
-  display: none;
+  display: none !important;
   float: left;
   min-width: 160px;
-  padding: 5px 0;
-  margin: 2px 0 0;
+  padding: 5px 0 !important;
+  margin: 2px 0 0 !important;
   list-style: none;
   font-size: 14px;
   background-color: #ffffff;
@@ -2440,7 +2440,7 @@ article h2:first-of-type {
 }
 .dropdown-menu > li > a {
   display: block;
-  padding: 3px 20px;
+  padding: 3px 20px !important;
   clear: both;
   font-weight: normal;
   line-height: 1.428571429;
@@ -2475,7 +2475,7 @@ article h2:first-of-type {
   cursor: not-allowed;
 }
 .open > .dropdown-menu {
-  display: block;
+  display: block !important;
 }
 .open > a {
   outline: 0;
@@ -2513,7 +2513,7 @@ article h2:first-of-type {
 }
 
 .subscription {
-  overflow: visible;
+  overflow: visible !important;
 }
 
 @media (min-width: 768px) {

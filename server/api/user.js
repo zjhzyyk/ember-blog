@@ -3,18 +3,20 @@ var User = require("../model/user");
 var timeout = 2592000000; // 30*24*60*60*1000 Rememeber 'me' for 30 days
 
 var isAuth = function(req, res){
-	if (req.session.token) {
+	if (req.session.username) {
+		console.log("username exists");
 		if (req.session.rememberme) {
+			// console.log(typeof(req.session.tokenGenTime));
 			var time = new Date();
-			if (time - req.session.tokenGenTime < timeout) {
+			var loginTime = new Date(req.session.loginTime);
+			if (time - loginTime < timeout) {
 				return true; 
 			} else {
-				console.log("token expires");
 				return false;
 			}
 		}
 		else {
-			console.log("has token, but not rememberme");
+			console.log("not rememberme");
 			return false;
 		}
 	} else {
@@ -28,20 +30,20 @@ module.exports.login = function(req, res){
 	var password = req.body.password;
 	var rememberme = req.body.rememberme;
 	User.findOne({username: username}, function(err, user){
+		console.log("find user in login function");
 		if (err) {
 			console.log("database find error", err);
 			res.json(200, {message: "database find error", success: false});
-		}
-		else if (!user) res.json(200, {message: "invalid username", success: false});
-		else {
+		} else if (!user) {
+			res.json(200, {message: "invalid username", success: false});
+		} else {
 			user.comparePassword(password, function(err, isMatch){
 				if (err) {
 					console.log("comparePassword error", err);
 					res.json(200, {message: "comparePassword err", success: false});
-				}
-				else if (isMatch) {
-					req.session.token = user.generateRandomToken();
-					req.session.tokenGenTime = new Date();
+				} else if (isMatch) {
+					req.session.loginTime = new Date();
+					req.session.username = username;
 					if (rememberme) {
 						req.session.cookie.maxAge = timeout;
 						req.session.rememberme = true;
@@ -58,6 +60,12 @@ module.exports.login = function(req, res){
 	});
 };
 
+module.exports.logout = function(req, res) {
+	req.session.token = null;
+	req.session.username = null;
+	res.send(200);
+};
+
 // module.exports.isAuth = isAuth;
 
 module.exports.register = function(req, res) {
@@ -66,12 +74,47 @@ module.exports.register = function(req, res) {
 	var email = req.body.email;
 	var usr = new User({ username: username, email: email, password: password });
 	usr.save(function(err) {
-	  if(err) {
-	    console.log("database save error", err);
-	  } else {
-	    res.send(200);
-	  }
+		if(err) {
+			console.log("database save error", err);
+		} else {
+			res.send(200);
+		}
 	});
+};
+
+module.exports.changePassword = function(req, res) {
+	if (isAuth(req, res)) {
+		var newPassword = req.body.newPassword;
+		var oldPassword = req.body.oldPassword;
+
+		User.findOne({username: req.session.username}, function(err, user){
+			if (err) {
+				console.log("database find error", err);
+				res.json(200, {message: "database find error", success: false});
+			} else if (!user) {
+				res.json(200, {message: "invalid username", success: false});
+			} else {
+				user.comparePassword(oldPassword, function(err, isMatch){
+					if (err) {
+						console.log("comparePassword error", err);
+						res.json(200, {message: "comparePassword err", success: false});
+					} else if (isMatch) {
+						user.password = newPassword;
+						user.save(function (err) {
+							if (err) {
+								console.log("save error", err);
+							} else {
+								res.json(200, {success: true});
+								console.log("change password successfully.");
+							}
+						});
+					} else {
+						res.json(200, {message: "incorrect password", success: false});
+					}
+				});
+			}
+		});
+	}
 };
 
 module.exports.getUser = function(req, res) {
@@ -79,6 +122,7 @@ module.exports.getUser = function(req, res) {
 	if (isAuth(req, res)) {
 		res.json(200, {username: req.session.username});
 	} else {
+		console.log("unauth in getUser");
 		res.json(200, {});
 	}
 };

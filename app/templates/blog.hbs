@@ -4,6 +4,12 @@
 			<h1 class="entry-title">{{title}}</h1>
 			<p class="meta">
 				<time>{{date}}</time>
+				{{#if session.loggedIn}}
+				&nbsp;|&nbsp;
+				<a href>Edit</a>
+				&nbsp;|&nbsp;
+				<a>Delete</a>
+				{{/if}}
 			</p>
 		</header>
 		<div class="entry-content">{{{model.content}}}</div>

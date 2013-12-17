@@ -11,8 +11,8 @@
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="">{{session.username}}</a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="">Change password</a></li>
-              <li><a href="">Logout</a></li>
+              <li>{{#link-to "changePassword"}}Change password{{/link-to}}</li>
+              <li><a {{action logout}}>Logout</a></li>
             </ul>
           </li>
         </ul>
