@@ -6,6 +6,7 @@ EmBlog.ApplicationController = Em.Controller.extend({
 				if (xhr.status==200) {
 					self.session.set("loggedIn", false);
 					self.session.set("username", "");
+					self.transitionToRoute('index');
 				}
 				else
 					console.log("fails to logout");

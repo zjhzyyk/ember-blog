@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "dependencies": {
     "ember": "1.1.2",
-    "bootstrap-sass": "~3.0.0"
+    "bootstrap-sass": "~3.0.0",
+    "tinymce-release": "~4.0.2"
   },
   "devDependencies": {
     "ember-mocha-adapter": "0.1.2"

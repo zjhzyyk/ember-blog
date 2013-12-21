@@ -21,6 +21,9 @@
         <ul class="main-navigation">
           <li>{{#link-to "blogs"}}Blogs{{/link-to}}</li>
           <li>{{#link-to "archives"}}Archives{{/link-to}}</li>
+          {{#if session.loggedIn}}
+          <li>{{#link-to "compose"}}Compose{{/link-to}}</li>
+          {{/if}}
         </ul>
     </nav>
     

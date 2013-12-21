@@ -9,8 +9,8 @@ EmBlog.Blogs.reopenClass({
 		var self = this;
 		var prevYear = 1000000;
 		return new Promise(function(resolve, reject){
-			if (self._blogs) {
-				resolve(self._blogs);
+			if (self.blogs) {
+				resolve(self.blogs);
 			} else {
 				resolve($.getJSON("/getblogs?page=1").then(function(res){
 					var blogs = Em.A();
@@ -28,7 +28,7 @@ EmBlog.Blogs.reopenClass({
 					self.page = 1;
 					if (self.page>=self.totalPages)
 						self.hasMore = false;
-					self._blogs = blogs;
+					self.blogs = blogs;
 					return blogs;
 				}));
 			}
@@ -50,13 +50,13 @@ EmBlog.Blogs.reopenClass({
 						if (blog.get('year')<prevYear) blog.set('showYear', true);
 						else blog.set('showYear', false);
 						prevYear = blog.get('year');
-						self._blogs.pushObject(blog);
+						self.blogs.pushObject(blog);
 					});
 					self.page++;
 					if (self.page>=self.totalPages)
 						self.hasMore = false;
 					return {
-						blogs: self._blogs,
+						blogs: self.blogs,
 						hasMore: self.hasMore
 					};
 				}));

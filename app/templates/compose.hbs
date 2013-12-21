@@ -1,0 +1,19 @@
+{{#if session.loggedIn}}
+<div>
+	<article class="hentry compose" role="article">
+		<header>
+			<h1 class="entry-title">Here is title</h1>
+			<p class="meta">
+				<time>{{date}}</time>
+				&nbsp;|&nbsp;
+				<a href {{action 'h2'}}>h2</a>
+				&nbsp;|&nbsp;
+				<a href {{action 'p'}}>p</a>
+				&nbsp;|&nbsp;
+				<a href {{action 'b'}}>b</a>
+			</p>
+		</header>
+		<div class="entry-content">Here is content</div>
+	</article>
+</div>
+{{/if}}

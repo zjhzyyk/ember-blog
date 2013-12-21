@@ -456,7 +456,7 @@ body {
 }
 @media only screen and (min-width: 992px) {
   /* line 51, ../sass/base/_layout.scss */
-  #main-body > header, #main-body > nav, #main-body > footer, body #content > article, body #content > div > article, body #content > div > section {
+  #main-body > header, #main-body > nav, #main-body > footer, article.compose, body #content > article, body #content > div > article, body #content > div > section {
     padding-left: 55px;
     padding-right: 55px;
   }
@@ -914,12 +914,12 @@ body.sidebar-footer .toggle-sidebar {
     color: #2b2b2b;
   }
   /* line 65, ../sass/partials/_navigation.scss */
-  #main-body > nav li + li {
+  #main-body > nav li:not(:first-child) {
     border-left: 1px solid #b0b0b0;
     margin-left: .8em;
   }
   /* line 68, ../sass/partials/_navigation.scss */
-  #main-body > nav li + li a {
+  #main-body > nav li:not(:first-child) a {
     padding-left: .8em;
     border-left: 1px solid #dedede;
   }

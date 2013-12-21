@@ -33,7 +33,7 @@ module.exports.getBlogs = function(req, res) {
 
 module.exports.create = function(req, res) {
 	var blog = new Blog({
-		name: req.body.name
+		content: req.body.name
 	});
 	blog.save(function (err) {
 		if (err) {
@@ -46,6 +46,17 @@ module.exports.create = function(req, res) {
 				id : blog.id
 			});
 			console.log('Created blog ' + JSON.stringify(req.body));
+		}
+	});
+};
+
+module.exports.delete = function(req, res) {
+	Blog.remove({_id: req.params.id}, function(err){
+		if (err) {
+			res.json(500, {error: err});
+		}
+		else {
+			res.json(200, {id: req.params.id});
 		}
 	});
 };

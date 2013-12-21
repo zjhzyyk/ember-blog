@@ -6,9 +6,9 @@
 				<time>{{date}}</time>
 				{{#if session.loggedIn}}
 				&nbsp;|&nbsp;
-				<a href>Edit</a>
+				{{#link-to "blog.edit"}}Edit{{/link-to}}
 				&nbsp;|&nbsp;
-				<a>Delete</a>
+				<a href {{action 'deletePost'}}>Delete</a>
 				{{/if}}
 			</p>
 		</header>
