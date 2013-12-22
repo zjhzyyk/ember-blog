@@ -5,5 +5,9 @@ EmBlog.ComposeRoute = Em.Route.extend({
 			title: "Title here",
 			content: "<p>Content here</p>"
 		});
+	},
+	setupController: function(controller, model){
+		controller.set("model", model);
+		controller.reset();
 	}
 });

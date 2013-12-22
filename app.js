@@ -42,6 +42,7 @@ app.post('/auth', user.login);
 app.post('/register', user.register);
 app.post('/logout', user.logout);
 app.post('/change-password', user.changePassword);
+app.post('/compose', blog.create);
 
 var port = process.env.PORT || 3000;
 app.listen(port);

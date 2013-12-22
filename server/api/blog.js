@@ -33,19 +33,21 @@ module.exports.getBlogs = function(req, res) {
 
 module.exports.create = function(req, res) {
 	var blog = new Blog({
-		content: req.body.name
+		createTime: new Date(req.body.createTime),
+		title: req.body.title,
+		content: req.body.content
 	});
 	blog.save(function (err) {
 		if (err) {
 			res.json(500,{
-				error: err
+				error: err,
+				success: false
 			});
-			console.log('Failed to create blog ' + JSON.stringify(req.body) + ', ' + err);
 		} else {
 			res.json(200,{
-				id : blog.id
+				message: "success",
+				success: true
 			});
-			console.log('Created blog ' + JSON.stringify(req.body));
 		}
 	});
 };
