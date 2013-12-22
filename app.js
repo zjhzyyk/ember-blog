@@ -19,7 +19,7 @@ app.configure(function(){
       var result = req.url.match(/\/(bower_components|styles|scripts)/);
       if (result) {
         req.url = req.url.slice(result.index);
-      } else if (/^\/(blogs|archives|login|register|compose|change\-password|(blog\/([0-9a-zA-Z]+)))/.test(req.url)) {
+      } else if (/^\/(blogs|archives|login|register|compose|change\-password|(edit\/([0-9a-zA-Z]+))|(blog\/([0-9a-zA-Z]+)))/.test(req.url)) {
         req.url = "/";
       }
     }
@@ -37,6 +37,7 @@ app.configure(function(){
 
 app.get('/getblogs', blog.getBlogs);
 app.delete('/blog/:id', blog.delete);
+app.put('/blog/:id', blog.modify);
 app.get('/getUser', user.getUser);
 app.post('/auth', user.login);
 app.post('/register', user.register);

@@ -52,6 +52,15 @@ module.exports.create = function(req, res) {
 	});
 };
 
+module.exports.modify = function(req, res){
+	Blog.update({_id: req.params.id}, {title: req.body.title, content: req.body.content}, function(err){
+		if (err)
+			console.log("update err");
+		else
+			res.json(200, {success: true});
+	});
+};
+
 module.exports.delete = function(req, res) {
 	Blog.remove({_id: req.params.id}, function(err){
 		if (err) {

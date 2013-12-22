@@ -15,6 +15,10 @@
 	No blogs.
 	{{/each}}
 	<div class="pagination">
-		<a {{action getMoreBlogs}}>{{pagMsg}}</a>
+		{{#if hasMore}}
+		<a {{action getMoreBlogs}}>Get more blogs</a>
+		{{else}}
+		<a>No more blogs</a>
+		{{/if}}
 	</div>
 </div>

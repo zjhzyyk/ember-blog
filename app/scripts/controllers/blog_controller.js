@@ -1,4 +1,5 @@
 EmBlog.BlogController = Em.ObjectController.extend({
+	inEditing: false,
 	actions: {
 		deletePost: function(){
 			var self = this;

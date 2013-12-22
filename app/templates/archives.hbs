@@ -22,6 +22,10 @@
 		</div>
 	</article>
 	<div class="pagination">
-		<a {{action getMoreArchives}}>{{pagMsg}}</a>
+		{{#if hasMore}}
+		<a {{action getMoreArchives}}>Get more archives</a>
+		{{else}}
+		<a>No more archives</a>
+		{{/if}}
 	</div>
 </div>

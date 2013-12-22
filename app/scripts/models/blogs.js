@@ -67,7 +67,12 @@ EmBlog.Blogs.reopenClass({
 		var self = this;
 		return new Promise(function(resolve){
 			resolve(self.loadBlogs().then(function(blogs){
-				return blogs.findBy('id', id);
+				var ret = blogs.findBy('id', id);
+				if (ret)
+					return ret;
+				else
+					//TODO: handle case when blog is not fetched yet.
+					return ret;
 			}));
 		});
 	}

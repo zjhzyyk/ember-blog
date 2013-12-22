@@ -7,6 +7,8 @@ EmBlog.ComposeRoute = Em.Route.extend({
 		});
 	},
 	setupController: function(controller, model){
+		if (!controller.session.loggedIn)
+			this.transitionTo("login");
 		controller.set("model", model);
 		controller.reset();
 	}

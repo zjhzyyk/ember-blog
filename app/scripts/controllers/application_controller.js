@@ -1,4 +1,4 @@
-EmBlog.ApplicationController = Em.Controller.extend({
+EmBlog.ApplicationController = Em.ObjectController.extend({
 	actions: {
 		logout: function(){
 			var self = this;

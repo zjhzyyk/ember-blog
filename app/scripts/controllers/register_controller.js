@@ -1,4 +1,4 @@
-EmBlog.RegisterController = Em.Controller.extend({
+EmBlog.RegisterController = Em.ObjectController.extend({
 	reset: function() {
     this.setProperties({
       username: "",

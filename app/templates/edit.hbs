@@ -1,15 +1,15 @@
-{{#if session.loggedIn}}
 <div>
 	<article class="hentry compose" role="article">
 		<header>
-			<h1 class="entry-title">Here is title</h1>
+			<h1 class="entry-title"></h1>
 			<p class="meta">
 				<time>{{date}}</time>
+				{{#if session.loggedIn}}
 				&nbsp;|&nbsp;
 				<a href {{action 'submit'}}>Submit</a>
+				{{/if}}
 			</p>
 		</header>
-		<div class="entry-content"><p>Here is content</p></div>
+		<div class="entry-content"></div>
 	</article>
 </div>
-{{/if}}

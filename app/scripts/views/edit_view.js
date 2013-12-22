@@ -1,4 +1,4 @@
-EmBlog.ComposeView = Em.View.extend({
+EmBlog.EditView = Em.View.extend({
 	didInsertElement: function(){
 		var self = this;
 		tinymce.init({
@@ -12,9 +12,9 @@ EmBlog.ComposeView = Em.View.extend({
 			toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
 			// Update model when calling setContent (such as from the source editor popup)
 			setup: function (ed) {
-				// ed.on('init', function() {
-				// 	ed.setContent("Here is content");
-				// });
+				ed.on('init', function() {
+					ed.setContent(self.get("controller.model.content"));
+				});
 				// Update model on button click
 				ed.on('ExecCommand', function (e) {
 					// ed.save();
@@ -41,9 +41,9 @@ EmBlog.ComposeView = Em.View.extend({
 			menubar: false,
 			// Update model when calling setContent (such as from the source editor popup)
 			setup: function (ed) {
-				// ed.on('init', function() {
-				// 	ed.setContent("Here is title");
-				// });
+				ed.on('init', function() {
+					ed.setContent(self.get("controller.model.title"));
+				});
 				// Update model on button click
 				ed.on('ExecCommand', function (e) {
 					// ed.save();
