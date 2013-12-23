@@ -10,6 +10,7 @@ EmBlog.RegisterController = Em.ObjectController.extend({
   actions: {
   	register: function(){
   		var self = this, data = this.getProperties('username', 'password', 'email');
+      data._csrf = self.session.get("csrf");
       // Clear out any error messages.
       this.set('errorMessage', null);
       data.password = CryptoJS.PBKDF2(data.password, data.username, 

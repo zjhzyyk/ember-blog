@@ -1,4 +1,3 @@
-var sanitize = require('validator').sanitize;
 var User = require("../model/user");
 var timeout = 2592000000; // 30*24*60*60*1000 Rememeber 'me' for 30 days
 

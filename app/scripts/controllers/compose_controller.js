@@ -8,11 +8,12 @@ EmBlog.ComposeController = Em.ObjectController.extend({
 			$.post("/compose", {
 				title: self.get("model.title"),
 				content: self.get("model.content"),
-				createTime: self.get("model.createTime")
+				createTime: self.get("model.createTime"),
+				_csrf: self.session.get("csrf")
 			}).then(function(response){
 				self.set('errorMessage', response.message);
 				if (response.success) {
-					EmBlog.Blogs.blogs = null;
+					EmBlog.Blogs.reset();
 					self.transitionToRoute('index');
 				}
 			});

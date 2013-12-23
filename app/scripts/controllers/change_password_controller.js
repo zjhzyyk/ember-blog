@@ -9,6 +9,7 @@ EmBlog.ChangePasswordController = Em.ObjectController.extend({
 	actions: {
 		changePassword: function(){
 			var self = this, data = this.getProperties('oldPassword', 'newPassword');
+			data._csrf = self.session.get("csrf");
 			this.set('errorMessage', null);
 			data.oldPassword = CryptoJS.PBKDF2(data.oldPassword, self.session.get("username"), {
 					keySize: self.config.get('pbkdf2_keysize'), 

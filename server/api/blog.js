@@ -1,5 +1,6 @@
 var Blog = require("../model/blog");
 var config = require("../config");
+var xss = require('xss');
 
 module.exports.getBlogs = function(req, res) {
 	if (!req.query.page || typeof parseInt(req.query.page)!=="number") {
@@ -34,8 +35,8 @@ module.exports.getBlogs = function(req, res) {
 module.exports.create = function(req, res) {
 	var blog = new Blog({
 		createTime: new Date(req.body.createTime),
-		title: req.body.title,
-		content: req.body.content
+		title: xss(req.body.title),
+		content: xss(req.body.content)
 	});
 	blog.save(function (err) {
 		if (err) {
@@ -53,7 +54,7 @@ module.exports.create = function(req, res) {
 };
 
 module.exports.modify = function(req, res){
-	Blog.update({_id: req.params.id}, {title: req.body.title, content: req.body.content}, function(err){
+	Blog.update({_id: req.params.id}, {title: xss(req.body.title), content: xss(req.body.content)}, function(err){
 		if (err)
 			console.log("update err");
 		else

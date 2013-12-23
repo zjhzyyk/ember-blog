@@ -11,5 +11,10 @@ EmBlog.ApplicationRoute = Em.Route.extend({
 			controller.session.loggedIn = false;
 			controller.session.username = "";	
 		}
+		if (controller.session.get("loggedIn") && !controller.session.get("csrf")) {
+			$.getJSON('/csrf').then(function(res){
+				controller.session.set("csrf", res.csrf);
+			});
+		}
 	}
 });

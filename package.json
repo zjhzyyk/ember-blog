@@ -4,10 +4,9 @@
   "dependencies": {
     "express": "~3.4.4",
     "mongoose": "~3.8.0",
-    "passport": "~0.1.17",
     "bcrypt": "~0.7.7",
-    "passport-local": "~0.1.6",
-    "validator": "~2.0.0"
+    "helmet": "~0.1.2",
+    "xss": "0.0.8"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

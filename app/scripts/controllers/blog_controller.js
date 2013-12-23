@@ -3,8 +3,14 @@ EmBlog.BlogController = Em.ObjectController.extend({
 	actions: {
 		deletePost: function(){
 			var self = this;
-			$.ajax({url: '/blog/'+self.get("model.id"), type: 'DELETE'}).then(function(){
-				EmBlog.Blogs.blogs = null;
+			$.ajax({
+				url: '/blog/'+self.get("model.id"), 
+				type: 'DELETE', 
+				headers: {
+					'X-CSRF-Token': self.session.get("csrf")
+				}
+			}).then(function(){
+				EmBlog.Blogs.reset();
 				self.transitionToRoute('blogs');
 			});
 		}

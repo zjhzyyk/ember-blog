@@ -34,6 +34,10 @@ EmBlog.Blogs.reopenClass({
 			}
 		});
 	},
+	reset: function(){
+		this.blogs = null;
+		this.hasMore = true;
+	},
 	loadMoreBlogs: function(){
 		var self = this;
 		var prevYear = self.prevYear;
@@ -55,6 +59,7 @@ EmBlog.Blogs.reopenClass({
 					self.page++;
 					if (self.page>=self.totalPages)
 						self.hasMore = false;
+					self.loadingBlogs = false;
 					return {
 						blogs: self.blogs,
 						hasMore: self.hasMore

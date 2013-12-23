@@ -7,11 +7,12 @@ EmBlog.EditController = Em.ObjectController.extend({
 				type: 'PUT',
 				data: {
 					title: self.get("model.title"),
-					content: self.get("model.content")
+					content: self.get("model.content"),
+					_csrf: self.session.get("csrf")
 				}
 			}).then(function(response){
 				if (response.success) {
-					EmBlog.Blogs.blogs = null;
+					EmBlog.Blogs.reset();
 					self.transitionToRoute('blog', self.get('model'));
 				}
 			});

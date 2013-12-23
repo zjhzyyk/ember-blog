@@ -11,5 +11,10 @@ EmBlog.ComposeRoute = Em.Route.extend({
 			this.transitionTo("login");
 		controller.set("model", model);
 		controller.reset();
+		if (controller.session.get("loggedIn") && !controller.session.get("csrf")) {
+			$.getJSON('/csrf').then(function(res){
+				controller.session.set("csrf", res.csrf);
+			});
+		}
 	}
 });

@@ -15,6 +15,7 @@ EmBlog.LoginController = Em.Controller.extend({
   actions: {
     login: function() {
       var self = this, data = this.getProperties('username', 'password', 'rememberme');
+      data._csrf = self.session.get("csrf");
       // Clear out any error messages.
       this.set('errorMessage', null);
       // console.log("keysize", self.config.get('pbkdf2_keysize'));
@@ -23,7 +24,7 @@ EmBlog.LoginController = Em.Controller.extend({
         keySize: self.config.get('pbkdf2_keysize'), 
         iterations: self.config.get("pbkdf2_iterations")
       }).toString();
-      console.log(data.password);
+      console.log(data);
       $.post('/auth', data).then(function(response) {
         self.set('errorMessage', response.message);
         if (response.success) {
