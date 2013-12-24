@@ -1,4 +1,4 @@
-EmBlog.ChangePasswordController = Em.ObjectController.extend({
+EmBlog.ChangePasswordController = Em.Controller.extend({
 	reset:function(){
 		this.setProperties({
 			oldPassword: "",

@@ -6,7 +6,8 @@
     "mongoose": "~3.8.0",
     "bcrypt": "~0.7.7",
     "helmet": "~0.1.2",
-    "xss": "0.0.8"
+    "xss": "0.0.8",
+    "connect-mongo": "~0.4.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

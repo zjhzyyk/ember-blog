@@ -1,10 +1,11 @@
 var express = require("express");
+var MongoStore = require('connect-mongo')(express);
 var blog = require("./server/api/blog");
 var user = require("./server/api/user");
 var mongoose = require("mongoose");
 var helmet = require('helmet');
 
-mongoose.connect("mongodb://localhost/test");
+mongoose.connect("mongodb://localhost/emblog");
 var app = express();
 
 app.configure(function(){
@@ -17,7 +18,10 @@ app.configure(function(){
   app.use(helmet.contentTypeOptions());
   app.use(helmet.cacheControl());
   app.use(express.cookieParser('7QCgCE4zokrn0&@zsn8MglH!ZbLTpM8C%QEMJtA@1lWhS3VTQl'));
-  app.use(express.session({ 
+  app.use(express.session({
+    store: new MongoStore({
+      url: 'mongodb://localhost/session'
+    }),
     secret: 'xIAD1HVIrQ6!vTQKya!a1$3X8YGDm9buIdWci&CB7Ew6kFO16K',
     cookie: {httpOnly: true}
   }));
@@ -35,14 +39,22 @@ app.configure(function(){
   });
   app.use(express.csrf());
   app.use(app.router);
+  app.use(express.compress());
+  app.disable('x-powered-by');
+});
+
+app.configure('development', function(){
   app.use(express.logger('dev'));
   app.use(express['static'](__dirname + '/app'));
   app.use(express['static'](__dirname + '/.tmp'));
-  app.disable('x-powered-by')
   app.use(express.errorHandler({
     dumpExceptions: true, 
     showStack: true
   }));
+});
+
+app.configure('production', function(){
+  app.use(express['static'](__dirname + '/dist'));
 });
 
 app.get('/getblogs', blog.getBlogs);
