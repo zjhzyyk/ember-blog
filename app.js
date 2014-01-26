@@ -17,12 +17,12 @@ app.configure(function(){
   app.use(helmet.iexss());
   app.use(helmet.contentTypeOptions());
   app.use(helmet.cacheControl());
-  app.use(express.cookieParser('7QCgCE4zokrn0&@zsn8MglH!ZbLTpM8C%QEMJtA@1lWhS3VTQl'));
+  app.use(express.cookieParser('notagoodserectkey'));
   app.use(express.session({
     store: new MongoStore({
       url: 'mongodb://localhost/session'
     }),
-    secret: 'xIAD1HVIrQ6!vTQKya!a1$3X8YGDm9buIdWci&CB7Ew6kFO16K',
+    secret: 'notagoodserectkey',
     cookie: {httpOnly: true}
   }));
   app.use(function(req, res, next) {
