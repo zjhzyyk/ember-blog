@@ -33,11 +33,13 @@ service mongodb restart
 4. if you have apache or any other web server installed, please stop them. (for server)
 5. login as a non-admin user. (for server)
 6. run
-```
-npm install
-bower install
-```
-to install all dependencies.
+
+   ```
+   npm install
+   bower install
+   ```
+   to install all dependencies.
+
 7. clone this repostitory to your server, modify security token in /app.js and compile the project by Grunt. For more information, please follow instruction of Grunt. If you only want to try in localhost, you can just switch to production branch.
 8. Now you are able run the blog by either node.js, nodemon, forever, or pm2. 
 ```
