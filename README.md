@@ -46,9 +46,7 @@ service mongodb restart
 NODE_ENV=production forever start app.js
 ```
 
-##Known issues
-Now the blog only fetches data on blogs page and archive page. I will need to let it able to fetch data on each blog page. I will fix this as soon as possible.
-
+##Issues
 If you find any problem in my code or in this README.md, please feel free to contact me at zjhzyyk{at}gmail{dot}com or create an issue in this repository.
 
 ##License
